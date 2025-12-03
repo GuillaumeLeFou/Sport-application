@@ -1,27 +1,7 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-
-from app.routers.user import router as user_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 from app.models.exercise import Exercise
 from app.models.exercise_secondary_muscle import ExerciseSecondaryMuscle
-
-MUSCLES = [
-    "Chest",
-    "Back",
-    "Shoulders",
-    "Biceps",
-    "Triceps",
-    "Quadriceps",
-    "Hamstrings",
-    "Glutes",
-    "Calves",
-    "Abs",
-    "Forearms",
-    "Traps",
-    "Lower back",
-]
 
 EXERCISES = [
     {
@@ -40,7 +20,7 @@ EXERCISES = [
         "secondary_muscles": ["Traps"],
     },
     {
-        "name": "Hammer Curls", 
+        "name": "Hammer Curls",
         "primary_muscle": "Biceps",
         "secondary_muscles": ["Forearms"],
     },
@@ -57,29 +37,17 @@ EXERCISES = [
 ]
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+def seed_exercises():
     db = SessionLocal()
     try:
-        # ------------ Seed MUSCLES ------------
-        muscles_by_name: dict[str, Muscle] = {
-            str(m.name): m for m in db.query(Muscle).all()
-        }
+        muscles_by_name = {m.name: m for m in db.query(Muscle).all()}
 
-        for name in MUSCLES:
-            if name not in muscles_by_name:
-                muscle = Muscle(name=name)
-                db.add(muscle)
-                db.flush()  # pour avoir muscle.id
-                muscles_by_name[name] = muscle
-
-        # ------------ Seed EXERCISES + secondary muscles ------------
         for data in EXERCISES:
             name = data["name"]
             primary_name = data["primary_muscle"]
             secondary_names = data["secondary_muscles"]
 
-            # Muscle principal
+            # 1) Récupérer / créer le muscle principal
             primary_muscle = muscles_by_name.get(primary_name)
             if not primary_muscle:
                 primary_muscle = Muscle(name=primary_name)
@@ -87,19 +55,17 @@ async def lifespan(app: FastAPI):
                 db.flush()
                 muscles_by_name[primary_name] = primary_muscle
 
-            # Exercice
+            # 2) Récupérer / créer l'exercice
             exercise = db.query(Exercise).filter(Exercise.name == name).first()
             if not exercise:
-                # ⚠️ Ici j'utilise "primary_muscle" car ta colonne s'appelle comme ça dans ton schéma.
-                # Si dans ton modèle SQLAlchemy c'est "primary_muscle_id", change ce paramètre.
                 exercise = Exercise(
                     name=name,
                     primary_muscle=primary_muscle.id,
                 )
                 db.add(exercise)
-                db.flush()  # pour avoir exercise.id
+                db.flush()
 
-            # Muscles secondaires
+            # 3) Gérer les muscles secondaires
             for sec_name in secondary_names:
                 sec_muscle = muscles_by_name.get(sec_name)
                 if not sec_muscle:
@@ -108,7 +74,7 @@ async def lifespan(app: FastAPI):
                     db.flush()
                     muscles_by_name[sec_name] = sec_muscle
 
-                # Vérifie si la relation existe déjà
+                # Vérifier si la relation existe déjà
                 exists = (
                     db.query(ExerciseSecondaryMuscle)
                     .filter(
@@ -127,30 +93,13 @@ async def lifespan(app: FastAPI):
                     )
 
         db.commit()
-        print("✅ Muscles + exercises seeded on startup.")
+        print("✅ Exercises + secondary muscles seeded")
     except Exception as e:
         db.rollback()
-        print("❌ Error seeding data:", e)
+        print("❌ Error seeding exercises:", e)
     finally:
         db.close()
 
-    # --------- API running ---------
-    yield
 
-    print("🛑 API shutting down...")
-
-
-app = FastAPI(lifespan=lifespan)
-
-app.include_router(user_router)
-
-
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
-
-
-@app.get("/")
-def root():
-    return {"message": "Sport API backend is running 🚀"}
-
+if __name__ == "__main__":
+    seed_exercises()
