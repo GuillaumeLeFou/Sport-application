@@ -44,13 +44,13 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 def update_user(user_id: int, data: UserCreate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
-        user.email = data.email # type: ignore
-        user.password = data.password # type: ignore
+        user.email = data.email         # type: ignore
+        user.password = data.password   # type: ignore
         user.firstname = data.firstname # type: ignore
-        user.lastname = data.lastname # type: ignore
-        user.age = data.age # type: ignore
-        user.weight = data.weight # type: ignore
-        user.height = data.height # type: ignore
+        user.lastname = data.lastname   # type: ignore
+        user.age = data.age             # type: ignore
+        user.weight = data.weight       # type: ignore
+        user.height = data.height       # type: ignore
         db.commit()
         db.refresh(user)
         return user

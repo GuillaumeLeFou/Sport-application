@@ -1,6 +1,3 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
-from app.routers.user import router as user_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 
@@ -20,8 +17,7 @@ MUSCLES = [
     "Lower back",
 ]
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+def seed_muscles():
     db = SessionLocal()
     try:
         for name in MUSCLES:
@@ -29,24 +25,12 @@ async def lifespan(app: FastAPI):
             if not exists:
                 db.add(Muscle(name=name))
         db.commit()
-        print("✅ Muscles seeded on startup.")
+        print("✅ Muscles seeded")
     except Exception as e:
+        db.rollback()
         print("❌ Error seeding muscles:", e)
     finally:
         db.close()
 
-    yield
-
-    print("🛑 API shutting down...")
-
-app = FastAPI(lifespan=lifespan)
-
-app.include_router(user_router)
-
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
-
-@app.get("/")
-def root():
-    return {"message": "Sport API backend is running 🚀"}
+if __name__ == "__main__":
+    seed_muscles()
