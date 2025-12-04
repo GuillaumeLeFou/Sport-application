@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from app.routers.user import router as user_router
+from app.routers.routine import router as routine_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 from app.models.exercise import Exercise
@@ -90,8 +91,6 @@ async def lifespan(app: FastAPI):
             # Exercice
             exercise = db.query(Exercise).filter(Exercise.name == name).first()
             if not exercise:
-                # ⚠️ Ici j'utilise "primary_muscle" car ta colonne s'appelle comme ça dans ton schéma.
-                # Si dans ton modèle SQLAlchemy c'est "primary_muscle_id", change ce paramètre.
                 exercise = Exercise(
                     name=name,
                     primary_muscle=primary_muscle.id,
@@ -143,6 +142,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(user_router)
+app.include_router(routine_router)
 
 
 @app.get("/health")
