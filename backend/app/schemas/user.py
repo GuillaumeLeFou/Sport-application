@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 class UserCreate(BaseModel):
     username: str
-    email: str
     password: str
     firstname: str
     lastname: str
@@ -10,11 +9,14 @@ class UserCreate(BaseModel):
     weight: float
     height: float
 
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
 
 class UserResponse(BaseModel):
     id: int
     username: str
-    email: str
     firstname: str
     lastname: str
     age: int

@@ -2,23 +2,23 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, UserLogin
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+@router.post("/{user_id}", response_model=UserResponse)
+def get_user_id(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
         return user
     return {"message": f"User with id {user_id} not found."}
 
 
+
 @router.post("/", response_model=UserResponse)
 def create_user(data: UserCreate, db: Session = Depends(get_db)):
     user = User(
         username=data.username,
-        email=data.email,
         password=data.password,
         firstname=data.firstname,
         lastname=data.lastname,
@@ -44,7 +44,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 def update_user(user_id: int, data: UserCreate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
-        user.email = data.email         # type: ignore
+        user.username = data.username   # type: ignore
         user.password = data.password   # type: ignore
         user.firstname = data.firstname # type: ignore
         user.lastname = data.lastname   # type: ignore

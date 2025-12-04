@@ -6,10 +6,12 @@ from app.routers.routine import router as routine_router
 from app.routers.routine_exercise import router as routine_exercise_router
 from app.routers.workout_session import router as workout_session_router
 from app.routers.workout_set import router as workout_set_router
+from app.routers.auth import router as auth_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 from app.models.exercise import Exercise
 from app.models.exercise_secondary_muscle import ExerciseSecondaryMuscle
+from fastapi.middleware.cors import CORSMiddleware
 
 MUSCLES = [
     "Chest",
@@ -59,7 +61,6 @@ EXERCISES = [
         "secondary_muscles": ["Glutes", "Hamstrings"],
     },
 ]
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -143,12 +144,26 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app = FastAPI()
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # en dev tu peux mettre ["*"] si tu veux
+    allow_credentials=True,
+    allow_methods=["*"],        # autorise GET, POST, etc.
+    allow_headers=["*"],        # autorise tous les headers (Content-Type, Authorization, ...)
+)
 
 app.include_router(user_router)
 app.include_router(routine_router)
 app.include_router(routine_exercise_router)
 app.include_router(workout_session_router)
 app.include_router(workout_set_router)
+app.include_router(auth_router)
 
 
 @app.get("/health")

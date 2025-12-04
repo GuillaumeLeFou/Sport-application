@@ -1,6 +1,6 @@
 CREATE TABLE "User" (
   "id" serial PRIMARY KEY,
-  "email" varchar,
+  "username" varchar,
   "password" varchar,
   "firstname" varchar,
   "lastname" varchar,
