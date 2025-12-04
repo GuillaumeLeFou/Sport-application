@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from app.routers.user import router as user_router
 from app.routers.routine import router as routine_router
 from app.routers.routine_exercise import router as routine_exercise_router
+from app.routers.workout_session import router as workout_session_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 from app.models.exercise import Exercise
@@ -145,6 +146,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
 app.include_router(routine_router)
 app.include_router(routine_exercise_router)
+app.include_router(workout_session_router)
 
 
 @app.get("/health")
