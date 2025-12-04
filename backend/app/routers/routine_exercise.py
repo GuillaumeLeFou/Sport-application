@@ -4,7 +4,7 @@ from app.database import get_db
 from app.models.routine_exercise import RoutineExercise
 from app.schemas.routine_exercise import RoutineExerciseCreate, RoutineExerciseResponse
 
-router = APIRouter(prefix="/routineExercise", tags=["routineExercise"])
+router = APIRouter(prefix="/routine_exercise", tags=["routine_exercise"])
 
 @router.get("/{routine_exercise_id}", response_model=RoutineExerciseResponse)
 def get_routine_exercise(routine_exercise_id: int, db: Session = Depends(get_db)):
