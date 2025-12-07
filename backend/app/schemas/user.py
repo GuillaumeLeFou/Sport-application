@@ -1,3 +1,4 @@
+from datetime import date
 from pydantic import BaseModel
 
 class UserCreate(BaseModel):
@@ -5,7 +6,7 @@ class UserCreate(BaseModel):
     password: str
     firstname: str
     lastname: str
-    age: int
+    birthday: date
     weight: float
     height: float
 
@@ -19,7 +20,7 @@ class UserResponse(BaseModel):
     username: str
     firstname: str
     lastname: str
-    age: int
+    birthday: date
     weight: float
     height: float
 

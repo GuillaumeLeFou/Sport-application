@@ -6,13 +6,12 @@ from app.schemas.user import UserCreate, UserResponse, UserLogin
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.post("/{user_id}", response_model=UserResponse)
+@router.get("/{user_id}", response_model=UserResponse)
 def get_user_id(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
         return user
     return {"message": f"User with id {user_id} not found."}
-
 
 
 @router.post("/", response_model=UserResponse)
@@ -22,14 +21,15 @@ def create_user(data: UserCreate, db: Session = Depends(get_db)):
         password=data.password,
         firstname=data.firstname,
         lastname=data.lastname,
-        age=data.age,
+        birthday=data.birthday,
         weight=data.weight,
-        height=data.height
+        height=data.height,
     )
     db.add(user)
     db.commit()
     db.refresh(user)
     return user
+
 
 @router.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
@@ -40,18 +40,21 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
         return {"message": f"User with id {user_id} deleted successfully."}
     return {"message": f"User with id {user_id} not found."}
 
+
 @router.put("/{user_id}", response_model=UserResponse)
 def update_user(user_id: int, data: UserCreate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if user:
-        user.username = data.username   # type: ignore
-        user.password = data.password   # type: ignore
-        user.firstname = data.firstname # type: ignore
-        user.lastname = data.lastname   # type: ignore
-        user.age = data.age             # type: ignore
-        user.weight = data.weight       # type: ignore
-        user.height = data.height       # type: ignore
+        user.username = data.username          # type: ignore
+        user.password = data.password          # type: ignore
+        user.firstname = data.firstname        # type: ignore
+        user.lastname = data.lastname          # type: ignore
+        user.birthday = data.birthday          # type: ignore
+        user.weight = data.weight              # type: ignore
+        user.height = data.height              # type: ignore
+
         db.commit()
         db.refresh(user)
         return user
+
     return {"message": f"User with id {user_id} not found."}
