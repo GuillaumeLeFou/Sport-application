@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { createBodyStat } from "../api/bodyStat";
 
-/**
- * Get user id from localStorage (same pattern as your LoginPage)
- */
 function getUserId(): number {
   try {
     const raw = localStorage.getItem("user");

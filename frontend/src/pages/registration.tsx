@@ -22,7 +22,7 @@ function RegisterPage() {
     const input = dateInputRef.current;
     if (!input) return;
 
-    // @ts-ignore : showPicker n'est pas encore dans le type standard
+    // @ts-ignore
     if (input.showPicker) {
       // @ts-ignore
       input.showPicker();
@@ -42,7 +42,7 @@ function RegisterPage() {
         password,
         firstname,
         lastname,
-        birthday: dateOfBirth, // ex: "2000-12-07"
+        birthday: dateOfBirth,
         weight: Number(weight),
         height: Number(height),
       };
@@ -71,19 +71,15 @@ function RegisterPage() {
     }
   };
 
-  // Classe de base pour tous les inputs "simples"
   const baseInputClasses =
     "w-full px-3 py-2.5 rounded-lg bg-zinc-900/80 border border-zinc-700 text-white text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/60 transition";
 
   return (
     <div className="h-screen overflow-hidden flex items-center justify-center bg-zinc-950 relative">
-      {/* Fond */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black" />
       <div className="absolute inset-0 -z-10 opacity-40 blur-3xl bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.35),_transparent_55%),_radial-gradient(circle_at_bottom,_rgba(15,118,110,0.25),_transparent_55%)]" />
 
-      {/* Carte */}
       <div className="w-full max-w-md max-h-[92vh] overflow-y-auto px-6 py-7 md:px-8 md:py-8 rounded-2xl border border-emerald-500/40 bg-zinc-950/80 shadow-[0_0_35px_rgba(16,185,129,0.35)] backdrop-blur-md">
-        {/* Titre */}
         <div className="mb-6 text-center">
           <h1 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
             Créer un compte
@@ -94,7 +90,6 @@ function RegisterPage() {
           </p>
         </div>
 
-        {/* Erreur */}
         {error && (
           <div className="mb-4 text-sm text-red-300 bg-red-950/40 px-3 py-2 rounded-lg border border-red-500/40">
             {error}
@@ -102,7 +97,6 @@ function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Prénom / Nom */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="block text-sm font-medium text-zinc-200">
@@ -130,7 +124,6 @@ function RegisterPage() {
             </div>
           </div>
 
-          {/* Username / Mot de passe */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="block text-sm font-medium text-zinc-200">
@@ -158,9 +151,7 @@ function RegisterPage() {
             </div>
           </div>
 
-          {/* Date de naissance + Poids + Taille */}
           <div className="flex flex-col sm:flex-row gap-3 mt-1">
-            {/* Date de naissance */}
             <div className="flex-1 space-y-1">
               <label className="block text-sm font-medium text-zinc-200">
                 Date de naissance
@@ -207,7 +198,6 @@ function RegisterPage() {
               </div>
             </div>
 
-            {/* Poids */}
             <div className="sm:w-28 flex-1 space-y-1">
               <label className="block text-sm font-medium text-zinc-200">
                 Poids
@@ -235,7 +225,6 @@ function RegisterPage() {
               </div>
             </div>
 
-            {/* Taille */}
             <div className="sm:w-28 flex-1 space-y-1">
               <label className="block text-sm font-medium text-zinc-200">
                 Taille
@@ -263,7 +252,6 @@ function RegisterPage() {
             </div>
           </div>
 
-          {/* Bouton */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -274,12 +262,12 @@ function RegisterPage() {
         </form>
 
         <p className="mt-4 text-xs text-center text-zinc-500">
-          Tu as déjà un compte ?{" "}
+          You have already an account ?{" "}
           <span
             onClick={() => navigate("/login")}
             className="text-emerald-400 hover:text-emerald-300 cursor-pointer"
           >
-            Retour à la connexion
+            connexion page
           </span>
         </p>
       </div>

@@ -43,10 +43,8 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
-      {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          {/* Brand */}
           <div
             className="cursor-pointer select-none text-lg font-semibold"
             onClick={() => navigate("/home")}
@@ -54,7 +52,6 @@ export default function MainLayout() {
             Sport<span className="text-emerald-400">App</span>
           </div>
 
-          {/* Nav */}
           <nav className="flex items-center gap-2">
             <NavLink to="/home" className={linkClass}>
               Home
@@ -63,7 +60,6 @@ export default function MainLayout() {
               Statistics
             </NavLink>
 
-            {/* Profile dropdown */}
             <div className="relative ml-4" ref={dropdownRef}>
               <button
                 onClick={() => setOpen((v) => !v)}
@@ -100,7 +96,6 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* PAGE CONTENT */}
       <main className="mx-auto max-w-6xl px-4 py-6">
         <Outlet />
       </main>

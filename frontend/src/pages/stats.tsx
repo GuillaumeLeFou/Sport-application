@@ -12,10 +12,6 @@ import {
 import BodyWeightUpdateCard from "../components/bodyWeightUpdateCard";
 import { getBodyStatsByUser, type BodyStat } from "../api/bodyStat";
 
-/* -------------------------------------------------------------------------- */
-/*                                   TYPES                                    */
-/* -------------------------------------------------------------------------- */
-
 type PR = {
   name: string;
   value: number;
@@ -27,10 +23,6 @@ type WeightPoint = {
   date: string;
   weight: number;
 };
-
-/* -------------------------------------------------------------------------- */
-/*                               SMALL HELPERS                                 */
-/* -------------------------------------------------------------------------- */
 
 function getUserId(): number {
   try {
@@ -44,14 +36,9 @@ function getUserId(): number {
 }
 
 function formatLabel(isoDate: string) {
-  // "YYYY-MM-DD" → "Dec 17"
   const d = new Date(`${isoDate}T00:00:00`);
   return d.toLocaleDateString(undefined, { month: "short", day: "2-digit" });
 }
-
-/* -------------------------------------------------------------------------- */
-/*                                 COMPONENTS                                 */
-/* -------------------------------------------------------------------------- */
 
 function ProgressBar({ value, max }: { value: number; max: number }) {
   const pct = Math.max(0, Math.min(100, Math.round((value / max) * 100)));
@@ -108,14 +95,8 @@ function Card({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                 PAGE                                       */
-/* -------------------------------------------------------------------------- */
-
 export default function StatsPage() {
   const userId = getUserId();
-
-  /* ------------------------------- DEMO PRS ------------------------------- */
 
   const prs: PR[] = [
     { name: "Bench Press", value: 85, unit: "kg", date: "2025-12-01" },
@@ -124,8 +105,6 @@ export default function StatsPage() {
     { name: "Pull-ups", value: 12, unit: "reps", date: "2025-12-05" },
     { name: "Shoulder Press", value: 55, unit: "kg", date: "2025-10-28" },
   ];
-
-  /* ---------------------------- BODY WEIGHT DATA --------------------------- */
 
   const [bodyStats, setBodyStats] = useState<BodyStat[]>([]);
   const [loadingWeights, setLoadingWeights] = useState(false);
@@ -161,15 +140,11 @@ export default function StatsPage() {
 
   const goalWeight = 80;
 
-  /* ----------------------------- WEEKLY PROGRESS --------------------------- */
-
   const weeklySessionsDone = 3;
   const weeklySessionsGoal = 4;
 
   const weightGainSoFar = currentWeight ? currentWeight - 70 : 0;
   const totalToGain = goalWeight - 70;
-
-  /* ------------------------------------------------------------------------ */
 
   return (
     <div className="min-h-[calc(100vh-96px)]">
@@ -181,7 +156,6 @@ export default function StatsPage() {
       </div>
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-12">
-        {/* ------------------------------ PR LIST ------------------------------ */}
         <Card
           title="Personal Records"
           subtitle="Your best lifts / performances"
@@ -211,7 +185,6 @@ export default function StatsPage() {
           </ul>
         </Card>
 
-        {/* --------------------------- BODY WEIGHT ----------------------------- */}
         <Card
           title="Body Weight"
           subtitle="Trend over time"
@@ -268,7 +241,6 @@ export default function StatsPage() {
           )}
         </Card>
 
-        {/* --------------------------- WEEKLY GOAL ----------------------------- */}
         <Card
           title="Weekly Goal"
           subtitle="Sessions completed this week"
