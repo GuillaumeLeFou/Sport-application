@@ -10,7 +10,6 @@ class DashboardStats(Base):
 
     user_id = Column(Integer, ForeignKey("User.id"), nullable=False)
 
-    # période
     period_type = Column(String, nullable=False)   # "week" | "month" | "all"
     period_start = Column(Date, nullable=False)
     period_end = Column(Date, nullable=False)

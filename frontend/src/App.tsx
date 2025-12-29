@@ -1,18 +1,29 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/login";
-import HomePage from "./pages/home";
-import RegisterPage from "./pages/registration";
+import MainLayout from "./layouts/MainLayout";
 
-function App() {
+import Login from "./pages/login";
+import Registration from "./pages/registration";
+import Home from "./pages/home";
+import StatsPage from "./pages/stats";
+
+export default function App() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/registration" element={<RegisterPage />} />
-      <Route path="/home" element={<HomePage />} />
-      {/* plus tard : <Route path="/dashboard" element={<Dashboard />} /> */}
+      {/* No menu */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/registration" element={<Registration />} />
+
+      {/* With menu */}
+      <Route element={<MainLayout />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/stats" element={<StatsPage />} />
+
+        {/* redirect "/" -> "/home" */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
+      </Route>
+
+      {/* catch-all */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }
-
-export default App;

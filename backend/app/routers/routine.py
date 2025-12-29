@@ -6,13 +6,17 @@ from app.schemas.routine import RoutineCreate, RoutineResponse
 
 router = APIRouter(prefix="/routines", tags=["routines"])
 
-@router.get("/{routine_id}")
+@router.get("/user/{user_id}")
+def get_routine_by_user(user_id: int, db: Session = Depends(get_db)):
+    routine = db.query(Routine).filter(Routine.user_id == user_id).all()
+    return routine
+
+@router.get("/id/{routine_id}")
 def get_routine(routine_id: int, db: Session = Depends(get_db)):
     routine = db.query(Routine).filter(Routine.id == routine_id).first()
     if routine:
         return routine
     return {"message": f"Routine with id {routine_id} not found."}
-
 
 @router.post("/", response_model=RoutineResponse)
 def create_routine(data: RoutineCreate, db: Session = Depends(get_db)):

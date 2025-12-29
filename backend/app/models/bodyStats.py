@@ -12,6 +12,8 @@ class BodyStats(Base):
 
     measured_at = Column(Date, nullable=False)
     body_weight = Column(Float, nullable=False)
+    body_weight_goal = Column(Float, nullable=True)
+    body_fat_percentage = Column(Float, nullable=True)
 
     notes = Column(String, nullable=True)
 

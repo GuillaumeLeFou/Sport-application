@@ -7,10 +7,14 @@ from app.routers.routine_exercise import router as routine_exercise_router
 from app.routers.workout_session import router as workout_session_router
 from app.routers.workout_set import router as workout_set_router
 from app.routers.auth import router as auth_router
+from app.routers.body_stats import router as body_stats_router
+from app.routers.dashboard_stats import router as dashboard_stats_router
 from app.database import SessionLocal
 from app.models.muscle import Muscle
 from app.models.exercise import Exercise
 from app.models.exercise_secondary_muscle import ExerciseSecondaryMuscle
+from app.models.bodyStats import BodyStats
+from app.models.dashboardStats import DashboardStats
 from fastapi.middleware.cors import CORSMiddleware
 
 MUSCLES = [
@@ -164,6 +168,8 @@ app.include_router(routine_exercise_router)
 app.include_router(workout_session_router)
 app.include_router(workout_set_router)
 app.include_router(auth_router)
+app.include_router(body_stats_router)
+app.include_router(dashboard_stats_router)
 
 
 @app.get("/health")
